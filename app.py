@@ -5,7 +5,7 @@ API_TOKEN = os.environ.get("API_TOKEN")
 bot = telebot.TeleBot(API_TOKEN)
 app = Flask(__name__)
 
-@app.route('/' + API_TOKEN, methods=['POST'])
+@app.route('/', methods=['POST'])
 def getMessage():
     json_string = request.get_data().decode('utf-8')
     update = telebot.types.Update.de_json(json_string)
