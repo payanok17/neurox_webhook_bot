@@ -1,18 +1,18 @@
 from flask import Flask, request
-import telebot
+import requests
 import os
 
-API_TOKEN = os.environ.get("API_TOKEN")
-bot = telebot.TeleBot(API_TOKEN)
 app = Flask(__name__)
 
-@app.route(f'/{API_TOKEN}', methods=['POST'])
-def receive_update():
-    json_string = request.get_data().decode('utf-8')
-    update = telebot.types.Update.de_json(json_string)
-    bot.process_new_updates([update])
+WEBHOOK_URL = os.environ.get("DISCORD_WEBHOOK_URL")
+
+@app.route("/", methods=["POST"])
+def send_alert():
+    data = request.json
+    msg = f"📡 NeuroX Alert:\n```{data}```"
+    requests.post(WEBHOOK_URL, json={"content": msg})
     return "OK", 200
 
-@app.route('/')
+@app.route("/")
 def home():
-    return "NeuroX Webhook Active", 200
+    return "NeuroX Discord Webhook is Live", 200
